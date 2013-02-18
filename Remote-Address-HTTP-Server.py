@@ -33,7 +33,9 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
         s.end_headers()
-        s.wfile.write(s.client_address[0])
+        ip = s.client_address[0]
+        if ip.startswith('::ffff:'): ip = ip.split('::ffff:')[1]
+        s.wfile.write(ip)
 
 class HTTPServerV6(BaseHTTPServer.HTTPServer):
     address_family = socket.AF_INET6
