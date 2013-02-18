@@ -10,7 +10,7 @@ Inspired by
 * and http://www.righto.com/2011/02/ipv6-web-serving-with-arc-or-python.html
 
 Written on 2013-02-18 by Philipp Klaus <philipp.l.klaus →AT→ web.de>.
-Check <> for newer versions.
+Check <https://gist.github.com/pklaus/4980542> for newer versions.
 """
 
 import time
