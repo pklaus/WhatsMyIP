@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -15,7 +15,7 @@ Check <https://gist.github.com/pklaus/4980542> for newer versions.
 
 import time
 import socket
-import BaseHTTPServer
+import http.server
 
 
 #HOST_NAME = 'example.net'
@@ -23,7 +23,7 @@ HOST_NAME = '::'
 PORT_NUMBER = 8080
 
 
-class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class MyHandler(http.server.BaseHTTPRequestHandler):
     def do_HEAD(s):
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
@@ -35,17 +35,17 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
         ip = s.client_address[0]
         if ip.startswith('::ffff:'): ip = ip.split('::ffff:')[1]
-        s.wfile.write(ip)
+        s.wfile.write(ip.encode('ascii'))
 
-class HTTPServerV6(BaseHTTPServer.HTTPServer):
+class HTTPServerV6(http.server.HTTPServer):
     address_family = socket.AF_INET6
 
 if __name__ == '__main__':
     httpd = HTTPServerV6((HOST_NAME, PORT_NUMBER), MyHandler)
-    print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print(time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER))
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print(time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER))
