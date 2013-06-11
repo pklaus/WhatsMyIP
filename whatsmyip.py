@@ -19,7 +19,7 @@ HOST_NAME = '::'
 PORT_NUMBER = 8080
 
 
-class MyHandler(http.server.BaseHTTPRequestHandler):
+class RequestHandler(http.server.BaseHTTPRequestHandler):
     def do_HEAD(s):
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
@@ -35,7 +35,7 @@ class HTTPServerV6(http.server.HTTPServer):
     address_family = socket.AF_INET6
 
 if __name__ == '__main__':
-    httpd = HTTPServerV6((HOST_NAME, PORT_NUMBER), MyHandler)
+    httpd = HTTPServerV6((HOST_NAME, PORT_NUMBER), RequestHandler)
     print(time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER))
     try:
         httpd.serve_forever()
