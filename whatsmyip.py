@@ -12,7 +12,7 @@ Check <https://github.com/pklaus/WhatsMyIP> for newer versions.
 import time
 import socket
 import http.server
-
+import ipaddress
 
 #HOST_NAME = 'example.net'
 HOST_NAME = '::'
@@ -26,12 +26,10 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         s.end_headers()
     def do_GET(s):
         """Respond to a GET request."""
-        s.send_response(200)
-        s.send_header("Content-type", "text/plain")
-        s.end_headers()
-        ip = s.client_address[0]
-        if ip.startswith('::ffff:'): ip = ip.split('::ffff:')[1]
-        s.wfile.write(ip.encode('ascii'))
+        RequestHandler.do_HEAD(s)
+        ip = ipaddress.ip_address(s.client_address[0])
+        if ip.ipv4_mapped: ip = ip.ipv4_mapped
+        s.wfile.write(str(ip).encode('ascii'))
 
 class HTTPServerV6(http.server.HTTPServer):
     address_family = socket.AF_INET6
