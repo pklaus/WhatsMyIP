@@ -12,12 +12,7 @@ Check <https://github.com/pklaus/WhatsMyIP> for newer versions.
 import time
 import socket
 import BaseHTTPServer
-
-
-#HOST_NAME = 'example.net'
-HOST_NAME = '::'
-PORT_NUMBER = 8080
-
+import argparse
 
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
@@ -36,13 +31,22 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 class HTTPServerV6(BaseHTTPServer.HTTPServer):
     address_family = socket.AF_INET6
 
-if __name__ == '__main__':
-    httpd = HTTPServerV6((HOST_NAME, PORT_NUMBER), RequestHandler)
-    print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('--host', default='::', help='IPv6 to bind to. Default is "::".')
+    parser.add_argument('--port', default=8080, type=int, help='Port to listen at. Default is 8080.')
+
+    args = parser.parse_args()
+
+    httpd = HTTPServerV6((args.host, args.port), RequestHandler)
+    print time.asctime(), "Server Starts - %s:%s" % (args.host, args.port)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print time.asctime(), "Server Stops - %s:%s" % (args.host, args.port)
+
+if __name__ == '__main__':
+    main()
 
