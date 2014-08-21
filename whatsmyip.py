@@ -13,7 +13,6 @@ import time
 import socket
 import http.server
 import ipaddress
-import argparse
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     def do_HEAD(s):
@@ -31,6 +30,7 @@ class HTTPServerV6(http.server.HTTPServer):
     address_family = socket.AF_INET6
 
 def main():
+    import argparse
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--host', default='::', help='IPv6 to bind to. Default is "::".')
     parser.add_argument('--port', default=8080, type=int, help='Port to listen at. Default is 8080.')
