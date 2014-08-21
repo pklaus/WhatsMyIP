@@ -12,7 +12,6 @@ Check <https://github.com/pklaus/WhatsMyIP> for newer versions.
 import time
 import socket
 import BaseHTTPServer
-import argparse
 
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
@@ -32,6 +31,7 @@ class HTTPServerV6(BaseHTTPServer.HTTPServer):
     address_family = socket.AF_INET6
 
 def main():
+    import argparse
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--host', default='::', help='IPv6 to bind to. Default is "::".')
     parser.add_argument('--port', default=8080, type=int, help='Port to listen at. Default is 8080.')
