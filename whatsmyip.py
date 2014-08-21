@@ -39,13 +39,13 @@ def main():
     args = parser.parse_args()
 
     httpd = HTTPServerV6((args.host, args.port), RequestHandler)
-    print time.asctime(), "Server Starts - %s:%s" % (args.host, args.port)
+    print(time.asctime(), "Server Starts - %s:%s" % (args.host, args.port))
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (args.host, args.port)
+    print(time.asctime(), "Server Stops - %s:%s" % (args.host, args.port))
 
 if __name__ == '__main__':
     main()
