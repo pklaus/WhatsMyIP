@@ -15,18 +15,24 @@ import http.server
 import ipaddress
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
+    """
+    A request handler that can only return the
+    REMOTE_ADDR - the IP of the connecting node.
+    """
     def do_HEAD(s):
+        """ Respond to a HEAD request. """
         s.send_response(200)
         s.send_header("Content-type", "text/plain")
         s.end_headers()
     def do_GET(s):
-        """Respond to a GET request."""
+        """ Respond to a GET request. """
         RequestHandler.do_HEAD(s)
         ip = ipaddress.ip_address(s.client_address[0])
         if ip.ipv4_mapped: ip = ip.ipv4_mapped
         s.wfile.write(str(ip).encode('ascii'))
 
 class HTTPServerV6(http.server.HTTPServer):
+    """ IPv6 enabled version of HTTPServer """
     address_family = socket.AF_INET6
 
 def main():
