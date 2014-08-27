@@ -13,6 +13,7 @@ import time
 import socket
 import http.server
 import ipaddress
+import urllib.parse
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     """
@@ -26,10 +27,26 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         s.end_headers()
     def do_GET(s):
         """ Respond to a GET request. """
-        RequestHandler.do_HEAD(s)
-        ip = ipaddress.ip_address(s.client_address[0])
-        if ip.ipv4_mapped: ip = ip.ipv4_mapped
-        s.wfile.write(str(ip).encode('ascii'))
+        parsed_path = urllib.parse.urlparse(s.path)
+        path = parsed_path[2]
+        if path == '/':
+            RequestHandler.do_HEAD(s)
+            ip = ipaddress.ip_address(s.client_address[0])
+            if ip.ipv4_mapped: ip = ip.ipv4_mapped
+            s.wfile.write(str(ip).encode('ascii'))
+        elif path == '/favicon.ico':
+            s.send_response(200)
+            s.send_header('Content-type', 'image/png')
+            s.end_headers()
+            with open('favicon.png', 'rb') as f:
+                s.wfile.write(f.read())
+        else:
+            s.send_response(404)
+            s.send_header("Content-type", "text/plain")
+            s.end_headers()
+            s.wfile.write("404 - Not found".encode('ascii'))
+    def version_string(self):
+        return 'WhatsMyIP/Python'
     def log_request(self, code='-', size='-'):
         """ Log accepted requests. """
         fmt = '"{request}" {code} {size} "{referer}" "{useragent}"'
