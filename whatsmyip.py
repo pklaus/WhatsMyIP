@@ -30,6 +30,13 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         ip = ipaddress.ip_address(s.client_address[0])
         if ip.ipv4_mapped: ip = ip.ipv4_mapped
         s.wfile.write(str(ip).encode('ascii'))
+    def log_request(self, code='-', size='-'):
+        """ Log accepted requests. """
+        fmt = '"{request}" {code} {size} "{referer}" "{useragent}"'
+        message = fmt.format(request=self.requestline, code=code, size=size,
+                             referer=self.headers.get('referer', ''),
+                             useragent=self.headers.get('user-agent', ''))
+        self.log_message(message)
 
 class HTTPServerV6(http.server.HTTPServer):
     """ IPv6 enabled version of HTTPServer """
