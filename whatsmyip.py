@@ -54,6 +54,13 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                              referer=self.headers.get('referer', ''),
                              useragent=self.headers.get('user-agent', ''))
         self.log_message(message)
+    def log_date_time_string(self):
+        """Return the current time formatted for logging."""
+        now = time.time()
+        year, month, day, hh, mm, ss, x, y, z = time.gmtime(now)
+        s = "%02d/%3s/%04d %02d:%02d:%02d" % (
+                day, self.monthname[month], year, hh, mm, ss)
+        return s
 
 class HTTPServerV6(http.server.HTTPServer):
     """ IPv6 enabled version of HTTPServer """
