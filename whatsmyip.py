@@ -31,7 +31,9 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         path = parsed_path[2]
         if path == '/':
             RequestHandler.do_HEAD(s)
-            ip = ipaddress.ip_address(s.client_address[0])
+            address = s.headers.get('X-Forwarded-For')
+            if not address: address = s.client_address[0]
+            ip = ipaddress.ip_address(address)
             if ip.ipv4_mapped: ip = ip.ipv4_mapped
             s.wfile.write(str(ip).encode('ascii'))
         elif path == '/favicon.ico':
