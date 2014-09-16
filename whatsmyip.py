@@ -34,7 +34,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             address = s.headers.get('X-Real-IP')
             if not address: address = s.client_address[0]
             ip = ipaddress.ip_address(address)
-            if ip.ipv4_mapped: ip = ip.ipv4_mapped
+            if ip.version == 6 and ip.ipv4_mapped: ip = ip.ipv4_mapped
             s.wfile.write(str(ip).encode('ascii'))
         elif path == '/favicon.ico':
             s.send_response(200)
