@@ -31,7 +31,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         path = parsed_path[2]
         if path == '/':
             RequestHandler.do_HEAD(s)
-            address = s.headers.get('X-Forwarded-For')
+            address = s.headers.get('X-Real-IP')
             if not address: address = s.client_address[0]
             ip = ipaddress.ip_address(address)
             if ip.ipv4_mapped: ip = ip.ipv4_mapped
