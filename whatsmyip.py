@@ -1,11 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
-A simple HTTP Server written in Python:
+This is a simple "What's My IP" Server:
 It returns the REMOTE_ADDR to connecting clients.
 
-Written in 2013 by Philipp Klaus <philipp.l.klaus →AT→ web.de>.
+It is written in Python and requires Python 3.3+
+
+Written in 2013/2014 by Philipp Klaus <philipp.l.klaus →AT→ web.de>.
 Check <https://github.com/pklaus/WhatsMyIP> for newer versions.
 """
 
