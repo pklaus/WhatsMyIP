@@ -24,40 +24,40 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     A request handler that can only return the
     REMOTE_ADDR - the IP of the connecting node.
     """
-    def do_HEAD(s):
+    def do_HEAD(self):
         """ Respond to a HEAD request. """
-        s.send_response(200)
-        s.send_header("Content-type", "text/plain")
-        s.end_headers()
-    def do_GET(s):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+    def do_GET(self):
         """ Respond to a GET request. """
-        parsed_path = urllib.parse.urlparse(s.path)
+        parsed_path = urllib.parse.urlparse(self.path)
         path = parsed_path[2]
         if path == '/':
-            RequestHandler.do_HEAD(s)
+            RequestHandler.do_HEAD(self)
             address = None
             if CONSIDER_XREALIP:
-                address = s.headers.get('X-Real-IP')
-            if not address: address = s.client_address[0]
+                address = self.headers.get('X-Real-IP')
+            if not address: address = self.client_address[0]
             ip = ipaddress.ip_address(address)
             if ip.version == 6 and ip.ipv4_mapped: ip = ip.ipv4_mapped
-            s.wfile.write(str(ip).encode('ascii'))
+            self.wfile.write(str(ip).encode('ascii'))
         elif path == '/favicon.ico':
-            s.send_response(200)
-            s.send_header('Content-type', 'image/png')
-            s.end_headers()
+            self.send_response(200)
+            self.send_header('Content-type', 'image/png')
+            self.end_headers()
             with open('favicon.png', 'rb') as f:
-                s.wfile.write(f.read())
+                self.wfile.write(f.read())
         else:
-            s.send_response(404)
-            s.send_header("Content-type", "text/plain")
-            s.end_headers()
-            s.wfile.write("404 - Not found".encode('ascii'))
-    def address_string(s):
+            self.send_response(404)
+            self.send_header("Content-type", "text/plain")
+            self.end_headers()
+            self.wfile.write("404 - Not found".encode('ascii'))
+    def address_string(self):
         address = None
         if CONSIDER_XREALIP:
-            address = s.headers.get('X-Real-IP')
-        if not address: address = s.client_address[0]
+            address = self.headers.get('X-Real-IP')
+        if not address: address = self.client_address[0]
         ip = ipaddress.ip_address(address)
         if ip.version == 6 and ip.ipv4_mapped:
             return "::ffff:" + str(ip.ipv4_mapped)
